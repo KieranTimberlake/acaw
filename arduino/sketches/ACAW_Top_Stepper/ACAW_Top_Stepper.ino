@@ -65,7 +65,7 @@ void loop() {
 
 
   if (cs > readingMin) {
-    speedIncrement += 50;
+    speedIncrement += 30;
     stepIncrement += 1;
   }
 
