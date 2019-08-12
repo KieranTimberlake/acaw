@@ -1,1 +1,0 @@
-@../MakeTests.bat
