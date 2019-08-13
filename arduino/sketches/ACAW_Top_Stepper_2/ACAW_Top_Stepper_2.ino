@@ -42,8 +42,8 @@ void setup() {
   pinMode(brakeA, OUTPUT);
   pinMode(brakeB, OUTPUT);
 
-  digitalWrite(pwmA, HIGH);
-  digitalWrite(pwmB, HIGH);
+  digitalWrite(pwmA, LOW);
+  digitalWrite(pwmB, LOW);
   digitalWrite(brakeA, LOW);
   digitalWrite(brakeB, LOW);
 
@@ -59,7 +59,7 @@ void loop() {
   //newSpeed = map(speedIncrement,0,255,80,255);
   //Serial.println(newSpeed);
   Serial.println(speedIncrement);
-  
+
   myStepper.setSpeed(speedIncrement);
   myStepper.step(speedIncrement); //Spins the motor on Channel A at full speed
 
@@ -91,12 +91,20 @@ void loop() {
 
   if (touching == true && toggled == false && lastReading == false) {
     toggled = true;
+    digitalWrite(pwmA, HIGH);
+    digitalWrite(pwmB, HIGH);
+    digitalWrite(brakeA, LOW);
+    digitalWrite(brakeB, LOW);
     Serial.println("wasn't toggled, turned on");
   }
 
   else if (touching == true && toggled == true && lastReading == false) {
     toggled = false;
     speedIncrement = 0;
+    digitalWrite(pwmA, LOW);
+    digitalWrite(pwmB, LOW);
+    digitalWrite(brakeA, LOW);
+    digitalWrite(brakeB, LOW);
     Serial.println("was toggled, turned off");
   }
 }
