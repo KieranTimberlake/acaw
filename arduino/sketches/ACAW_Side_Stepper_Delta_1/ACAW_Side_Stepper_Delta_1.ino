@@ -1,5 +1,5 @@
 #include <CapacitiveSensor.h>
-#include <Stepper.h>
+//#include <Stepper.h>
 
 #include <AccelStepper.h>
 
@@ -28,90 +28,96 @@ const int brakeB = 8;
 const int dirA = 12;
 const int dirB = 13;
 
-// Initialize the stepper library on the motor shield:
-//Stepper myStepper = Stepper(stepsPerRevolution, dirA, dirB);
-
-AccelStepper stepper;
-
+AccelStepper stepper(2, dirA, dirB);
 
 unsigned long timeElapsed = 0;
 
 void setup() {
   cs_2_4.set_CS_AutocaL_Millis(0xFFFFFFFF); // turns off calibration
-  Serial.begin(9600);
-  
+  //  Serial.begin(9600);
 
   // Set the PWM and brake pins so that the direction pins can be used to control the motor:
-//  pinMode(pwmA, OUTPUT);
-//  pinMode(pwmB, OUTPUT);
-//  pinMode(brakeA, OUTPUT);
-//  pinMode(brakeB, OUTPUT);
-//
-//  digitalWrite(pwmA, HIGH);
-//  digitalWrite(pwmB, HIGH);
-//  digitalWrite(brakeA, LOW);
-//  digitalWrite(brakeB, LOW);
-//  
-//  myStepper.setSpeed(speedIncrement);
+  pinMode(pwmA, OUTPUT);
+  pinMode(pwmB, OUTPUT);
+  pinMode(brakeA, OUTPUT);
+  pinMode(brakeB, OUTPUT);
+  //
+  digitalWrite(pwmA, HIGH);
+  digitalWrite(pwmB, HIGH);
+  digitalWrite(brakeA, LOW);
+  digitalWrite(brakeB, LOW);
+  //
+  //    myStepper.setSpeed(speedIncrement);
 
-    stepper.setMaxSpeed(200.0);
-    stepper.setAcceleration(100.0);
+  stepper.setMaxSpeed(200.0);
+  stepper.setSpeed(500);
+  stepper.setAcceleration(500.0);
 
-    stepper.runToNewPosition(200);
+  stepper.moveTo(100);
 
 }
 
 void loop() {
-//  delay(loopInterval);
-//  timeElapsed += loopInterval;
-//  Serial.println(timeElapsed); 
-//  long cs = cs_2_4.capacitiveSensor(30);
-//  lastReading = touching;
-//
-//  // randomize for less 'mechanical' sound = clank... clank, clank! 
-//  if(timeElapsed >= delayIncrement && toggled){
-//    // Step quarter revolution in one direction, switch every other
-//    
-//    if( pos ){
-//      myStepper.step(stepIncrement);
-//      pos = false;
-//    } else{
-//      myStepper.step(-stepIncrement);
-//      pos = true;
-//    }
-//    
-//    timeElapsed = 0;
-//    Serial.println("moved");    
-//  }
-//
-//  if (delayIncrement < loopInterval) {
-//    delayIncrement = loopInterval;
-//  }
-//
-//   if (toggled == false) {
-//    delayIncrement = maxDelay;
-//  }
-//
-//  if (cs > readingMin) {
-//      touching = true;
-//      Serial.println("touching");
-//  } else {
-//      touching = false;
-//  }
-//
-//  if (touching == true && toggled == false && lastReading == false) {
-//    toggled = true;
-//    Serial.println("was off, turned on");
-//  }
-//
-//  else if (touching == true && toggled == true && lastReading == false) {
-//    toggled = false;
-//    delayIncrement = maxDelay;
-//    Serial.println("was on, turned off");
-//  }
-//
-//  if(toggled and touching){
-//      delayIncrement -= 10;
-//  }
-//  
+
+
+  if (stepper.distanceToGo() == 0) {
+    stepper.run();                   // let the AccelStepper to disable motor current after stop
+    delay(2000);                     // wait 2 sec in final position
+    stepper.moveTo(-stepper.currentPosition());
+  }
+  stepper.run();
+
+
+  //  delay(loopInterval);
+  //  timeElapsed += loopInterval;
+  //  Serial.println(timeElapsed);
+  //  long cs = cs_2_4.capacitiveSensor(30);
+  //  lastReading = touching;
+  //
+  //  // randomize for less 'mechanical' sound = clank... clank, clank!
+  //  if(timeElapsed >= delayIncrement && toggled){
+  //    // Step quarter revolution in one direction, switch every other
+  //
+  //    if( pos ){
+  //      myStepper.step(stepIncrement);
+  //      pos = false;
+  //    } else{
+  //      myStepper.step(-stepIncrement);
+  //      pos = true;
+  //    }
+  //
+  //    timeElapsed = 0;
+  //    Serial.println("moved");
+  //  }
+  //
+  //  if (delayIncrement < loopInterval) {
+  //    delayIncrement = loopInterval;
+  //  }
+  //
+  //   if (toggled == false) {
+  //    delayIncrement = maxDelay;
+  //  }
+  //
+  //  if (cs > readingMin) {
+  //      touching = true;
+  //      Serial.println("touching");
+  //  } else {
+  //      touching = false;
+  //  }
+  //
+  //  if (touching == true && toggled == false && lastReading == false) {
+  //    toggled = true;
+  //    Serial.println("was off, turned on");
+  //  }
+  //
+  //  else if (touching == true && toggled == true && lastReading == false) {
+  //    toggled = false;
+  //    delayIncrement = maxDelay;
+  //    Serial.println("was on, turned off");
+  //  }
+  //
+  //  if(toggled and touching){
+  //      delayIncrement -= 10;
+  //  }
+  //
 }
